@@ -8,8 +8,17 @@
     "apps/*"
   ],
   "scripts": {
-    "build": "pnpm -r --filter ./packages/* run build",
-    "test": "pnpm -r --filter ./packages/* run test",
-    "dev": "pnpm --filter @threeflightsim/sim-client dev"
+    "build": "pnpm -r --filter \"./packages/*\" run build",
+    "test": "pnpm -r --filter \"./packages/*\" run test",
+    "dev": "pnpm --filter @threeflightsim/sim-client dev",
+    "lint": "eslint . --ext .ts",
+    "typecheck": "pnpm -r --filter \"./packages/*\" exec tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^9.9.0",
+    "eslint-config-prettier": "^9.1.0",
+    "typescript": "^5.5.0"
   }
 }
