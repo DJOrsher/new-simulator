@@ -56,3 +56,15 @@ Each change should be committed to Git. After successfully completing a distinct
 6. Use fixed timestep integration in the core.
 7. Keep scope minimal. One behavior per change, with corresponding tests.
 8. If uncertain, state your assumption in a comment: // ASSUMPTION: ...
+
+## Bootstrapping Learnings
+
+- **pnpm on WSL**: Prefer Corepack or a per-user install. If PATH isn’t updated, call pnpm via `~/.local/share/pnpm/pnpm` or `source ~/.bashrc`.
+  - Avoid global `npm i -g pnpm` on WSL due to EACCES; install Node via `nvm` and enable pnpm with Corepack or the per-user installer.
+- **ESLint v9 flat config**: `.eslintrc.*` is no longer supported. Use a flat config (CJS is simplest): `eslint.config.cjs` with the TS parser. Keep rules minimal initially so lint can run.
+- **Vitest config**: Add `packages/core/vitest.config.ts` using `defineConfig` from `vitest/config`. If esbuild throws syntax errors, ensure the file content wasn’t mangled by the shell and uses proper quotes.
+- **Shell quoting and file writes**: When generating files from scripts, use single-quoted heredocs (e.g., `<< 'EOF'`) or base64-encode content to avoid interpolation and quote breakage in WSL.
+- **pnpm filter quoting**: Quote filters in root scripts to prevent shell glob expansion:
+  - `"pnpm -r --filter \"./packages/*\" run test"` and same for build/typecheck.
+- **No-op tests for adapters (early stage)**: Until adapter packages have tests, set their `test` script to `"echo no tests"` so `pnpm -w test` focuses on core.
+- **Git via SSH**: Use SSH remotes and conventional commits. Push only after green `test`, `lint`, and `build`.
